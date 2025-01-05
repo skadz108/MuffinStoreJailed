@@ -13,7 +13,7 @@ struct HeaderView: View {
             Text("MuffinStore Jailed")
                 .font(.largeTitle)
                 .fontWeight(.bold)
-            Text("by @mineekdev")
+            Text("by @mineekdev, UI by @skadz108")
                 .font(.caption)
         }
     }
@@ -21,18 +21,23 @@ struct HeaderView: View {
 
 struct FooterView: View {
     var body: some View {
-        VStack {
-            VStack {
-                Image(systemName: "exclamationmark.triangle")
-                    .foregroundStyle(.red)
+        HStack(alignment: .top, spacing: 8) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .imageScale(.large)
+            
+            VStack(alignment: .leading, spacing: 4) {
                 Text("Use at your own risk!")
-                    .foregroundStyle(.yellow)
-                Image(systemName: "exclamationmark.triangle")
-                    .foregroundStyle(.red)
+                    .font(.system(size: 20, weight: .bold))
+                
+                Text("I am not responsible for any damage, data loss, or any other issues caused by this tool.")
+                    .font(.system(size: 14))
+                    .opacity(0.75)
             }
-            Text("I am not responsible for any damage, data loss, or any other issues caused by using this tool.")
-                .font(.caption)
         }
+        .frame(width: 340)
+        .padding(8)
+        .background(.red)
+        .cornerRadius(14)
     }
 }
 
@@ -51,107 +56,168 @@ struct ContentView: View {
     var body: some View {
         VStack {
             HeaderView()
+                .padding(.top, 5)
             Spacer()
             if !isAuthenticated {
                 VStack {
-                    Text("Log in to the App Store")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                    Text("Your credentials will be sent directly to Apple.")
-                        .font(.caption)
-                }
-                TextField("Apple ID", text: $appleId)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-                SecureField("Password", text: $password)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-                TextField("2FA Code", text: $code)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-                Button("Authenticate") {
-                    if appleId.isEmpty || password.isEmpty {
-                        return
+                    List {
+                        HStack { // this sucks but it's the only way (i know) that can center this
+                            Spacer()
+                            VStack(alignment: .center) {
+                                Text("Log in to the App Store")
+                                    .font(.headline)
+                                    .fontWeight(.bold)
+                                Text("Your credentials will be sent directly to Apple.")
+                                    .font(.caption)
+                            }
+                            Spacer()
+                        }
+                        HStack(spacing: 5) {
+                            Image(systemName: "at")
+                            Spacer()
+                            TextField("Apple ID", text: $appleId)
+                                .autocapitalization(.none)
+                                .disableAutocorrection(true)
+                        }
+                        HStack(spacing: 5) {
+                            Image(systemName: "ellipsis.rectangle")
+                            Spacer()
+                            SecureField("Password", text: $password)
+                        }
+                        HStack(spacing: 5) {
+                            Image(systemName: "lock.shield")
+                            Spacer()
+                            TextField("2FA Code", text: $code)
+                                .keyboardType(.numberPad)
+                            Button(action: {
+                                showAlert(title: "Instructions", message: "To get a 2FA code, go to Settings > [Your Name] > Sign-In & Security > Two-Factor Authentication > Get Verification Code.")
+                            }) {
+                                Image(systemName: "questionmark.circle")
+                            }
+                            .frame(width: 32)
+                        }
+                        Button(action: {
+                            let finalPassword = password + code
+                            ipaTool = IPATool(appleId: appleId, password: finalPassword)
+                            let ret = ipaTool?.authenticate()
+                            isAuthenticated = ret ?? false
+                        }) {
+                            Text("Authenticate")
+                        }
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .disabled(appleId.isEmpty || password.isEmpty || code.isEmpty)
                     }
-                    if code.isEmpty {
-                        // we can just try to log in and it'll request a code, very scuffed tho.
-                        ipaTool = IPATool(appleId: appleId, password: password)
-                        ipaTool?.authenticate(requestCode: true)
-                        return
-                    }
-                    let finalPassword = password + code
-                    ipaTool = IPATool(appleId: appleId, password: finalPassword)
-                    let ret = ipaTool?.authenticate()
-                    isAuthenticated = ret ?? false
-                }
-                .padding()
-                
-                HStack {
-                    Image(systemName: "info.circle.fill")
-                        .foregroundColor(.yellow)
-                    Text("You WILL need to give a 2FA code to successfully log in.")
                 }
             } else {
                 if isDowngrading {
                     VStack {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle())
-                        Text("Please wait...")
-                            .font(.headline)
-                            .fontWeight(.bold)
-                        Text("The app is being downgraded. This may take a while.")
-                            .font(.caption)
-                        
-                        Button("Done (exit app)") {
-                            exit(0) // scuffed
+                        VStack {
+                            List {
+                                Section {
+                                    HStack {
+                                        Spacer()
+                                        VStack(alignment: .center) {
+                                            Text("Please wait...")
+                                                .font(.headline)
+                                                .fontWeight(.bold)
+                                            Text("The app is being downgraded. This may take a while.")
+                                                .font(.caption)
+                                            
+                                            ProgressView()
+                                                .progressViewStyle(.circular)
+                                                .frame(width: 34, alignment: .center)
+                                        }
+                                        Spacer()
+                                    }
+                                }
+                                
+                                Section {
+                                    HStack(spacing: 5) {
+                                        Image(systemName: "xmark.app")
+                                        Button("Done (exit app)") {
+                                            UIApplication.shared.returnToHomeScreen() // scuffed
+                                        }
+                                    }
+                                }
+                            }
                         }
-                        .padding()
                     }
                 } else {
                     VStack {
-                        Text("Downgrade an app")
-                            .font(.headline)
-                            .fontWeight(.bold)
-                        Text("Enter the App Store link of the app you want to downgrade.")
-                            .font(.caption)
-                    }
-                    TextField("App share Link", text: $appLink)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding()
-                    Button("Downgrade") {
-                        if appLink.isEmpty {
-                            return
-                        }
-                        var appLinkParsed = appLink
-                        appLinkParsed = appLinkParsed.components(separatedBy: "id").last ?? ""
-                        for char in appLinkParsed {
-                            if !char.isNumber {
-                                appLinkParsed = String(appLinkParsed.prefix(upTo: appLinkParsed.firstIndex(of: char)!))
-                                break
+                        List {
+                            Section {
+                                HStack {
+                                    Spacer()
+                                    VStack(alignment: .center) {
+                                        Text("Downgrade an app")
+                                            .font(.headline)
+                                            .fontWeight(.bold)
+                                        Text("Enter an App Store link.")
+                                            .font(.caption)
+                                    }
+                                    Spacer()
+                                }
+                                HStack(spacing: 5) {
+                                    Image(systemName: "arrow.up.forward.app")
+                                    Spacer()
+                                    TextField("App Link", text: $appLink)
+                                }
+                                Button(action: {
+                                    if appLink.isEmpty {
+                                        return
+                                    }
+                                    var appLinkParsed = appLink.components(separatedBy: "id").last ?? ""
+                                    for char in appLinkParsed {
+                                        if !char.isNumber {
+                                            appLinkParsed = String(appLinkParsed.prefix(upTo: appLinkParsed.firstIndex(of: char)!))
+                                            break
+                                        }
+                                    }
+                                    print("App ID: \(appLinkParsed)")
+                                    isDowngrading = true
+                                    downgradeApp(appId: appLinkParsed, ipaTool: ipaTool!)
+                                }) {
+                                    Text("Downgrade")
+                                }
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .disabled(appLink.isEmpty)
                             }
+                            
+                            Section {
+                                HStack(spacing: 5) {
+                                    Image(systemName: "person.crop.circle")
+                                    Text("Signed in as \(ipaTool?.appleId.redactEmail() ?? "<unknown>")")
+                                }
+                                HStack(spacing: 5) {
+                                    Image(systemName: "person.crop.circle.badge.xmark")
+                                    Button(action: {
+                                        EncryptedKeychainWrapper.nuke()
+                                        EncryptedKeychainWrapper.generateAndStoreKey()
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                            isAuthenticated = false
+                                            UIApplication.shared.returnToHomeScreen()
+                                        }
+                                    }) {
+                                        Text("Log out and exit")
+                                    }
+                                }
+                            }
+                            
+//                            Button("Log out and exit") {
+//                                isAuthenticated = false
+//                                EncryptedKeychainWrapper.nuke()
+//                                EncryptedKeychainWrapper.generateAndStoreKey()
+//                                sleep(3)
+//                                UIApplication.shared.returnToHomeScreen() // scuffed
+//                            }
+//                            .padding()
                         }
-                        print("App ID: \(appLinkParsed)")
-                        isDowngrading = true
-                        downgradeApp(appId: appLinkParsed, ipaTool: ipaTool!)
                     }
-                    .padding()
-
-                    Button("Log out and exit") {
-                        isAuthenticated = false
-                        EncryptedKeychainWrapper.nuke()
-                        EncryptedKeychainWrapper.generateAndStoreKey()
-                        sleep(3)
-                        exit(0) // scuffed
-                    }
-                    .padding()
                 }
             }
-            Spacer()
             FooterView()
+                .padding()
         }
-        .padding()
         .onAppear {
             isAuthenticated = EncryptedKeychainWrapper.hasAuthInfo()
             print("Found \(isAuthenticated ? "auth" : "no auth") info in keychain")

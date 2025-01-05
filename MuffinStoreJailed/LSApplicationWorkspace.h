@@ -8,6 +8,8 @@
 #ifndef LSApplicationWorkspace_h
 #define LSApplicationWorkspace_h
 
+#import <Foundation/Foundation.h>
+
 @interface LSApplicationWorkspace : NSObject
 + (instancetype)defaultWorkspace;
 - (bool)openApplicationWithBundleID:(NSString*)bundleID;

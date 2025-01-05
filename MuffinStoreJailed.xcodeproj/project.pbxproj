@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		439E0E832D29EA0600AA8D9F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439E0E822D29EA0600AA8D9F /* MobileCoreServices.framework */; };
 		6FA2A8FF2D2426F2005CF73D /* Telegraph in Frameworks */ = {isa = PBXBuildFile; productRef = 6FA2A8FE2D2426F2005CF73D /* Telegraph */; };
 		6FA2A9022D2426F9005CF73D /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 6FA2A9012D2426F9005CF73D /* Zip */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		439E0E822D29EA0600AA8D9F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		6FA2A8E82D24268F005CF73D /* MuffinStoreJailed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MuffinStoreJailed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -28,6 +30,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				439E0E832D29EA0600AA8D9F /* MobileCoreServices.framework in Frameworks */,
 				6FA2A9022D2426F9005CF73D /* Zip in Frameworks */,
 				6FA2A8FF2D2426F2005CF73D /* Telegraph in Frameworks */,
 			);
@@ -36,10 +39,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		439E0E812D29EA0600AA8D9F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				439E0E822D29EA0600AA8D9F /* MobileCoreServices.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		6FA2A8DF2D24268F005CF73D = {
 			isa = PBXGroup;
 			children = (
 				6FA2A8EA2D24268F005CF73D /* MuffinStoreJailed */,
+				439E0E812D29EA0600AA8D9F /* Frameworks */,
 				6FA2A8E92D24268F005CF73D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -265,7 +277,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MuffinStoreJailed/Preview Content\"";
-				DEVELOPMENT_TEAM = K9BN25527C;
+				DEVELOPMENT_TEAM = TA2N4LNLT8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "To securely store your Apple ID authentication information, biometric authentication is required.";
@@ -280,13 +292,14 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.mineek.MuffinStoreJailed;
+				PRODUCT_BUNDLE_IDENTIFIER = online.skadz.MuffinStoreJailed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = MuffinStoreJailed/LSApplicationWorkspace.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -300,7 +313,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MuffinStoreJailed/Preview Content\"";
-				DEVELOPMENT_TEAM = K9BN25527C;
+				DEVELOPMENT_TEAM = TA2N4LNLT8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "To securely store your Apple ID authentication information, biometric authentication is required.";
@@ -315,13 +328,14 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.mineek.MuffinStoreJailed;
+				PRODUCT_BUNDLE_IDENTIFIER = online.skadz.MuffinStoreJailed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = MuffinStoreJailed/LSApplicationWorkspace.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

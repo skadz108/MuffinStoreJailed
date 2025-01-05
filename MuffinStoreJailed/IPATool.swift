@@ -38,7 +38,24 @@ extension String {
         let end = index(startIndex, offsetBy: r.upperBound)
         return String(self[start..<end])
     }
+    
+    func redactEmail() -> String {
+        let email = self
+        let components = email.components(separatedBy: "@")
+        var maskEmail = ""
+        if let first = components.first {
+            maskEmail = String(first.enumerated().map { index, char in
+                return [0, 0, first.count, first.count - 1].contains(index) ?
+                char : "*"
+            })
+        }
+        if let last = components.last {
+            maskEmail = maskEmail + "@" + last
+        }
+        return maskEmail
+    }
 }
+
 
 class StoreClient {
     var session: URLSession
